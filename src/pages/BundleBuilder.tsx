@@ -109,6 +109,10 @@ function BuilderInner({ products }: { products: Product[] }) {
   // Auto-reset to 'stack' when viewport drops below xl (1440px)
   useEffect(() => {
     const mql = window.matchMedia('(min-width: 1440px)');
+    // Initial check on mount
+    if (!mql.matches) {
+      setLayoutMode('stack');
+    }
     function handleChange(e: MediaQueryListEvent) {
       if (!e.matches) setLayoutMode('stack');
     }
@@ -133,37 +137,34 @@ function BuilderInner({ products }: { products: Product[] }) {
   // Breakpoints:
   //   Mobile (<768px)  → single column, cards in 1 col
   //   md (768–1023px)  → single column, cards in 2 col grid
-  //   lg (1024–1212px) → side by side: builder + review panel (340px)
+  //   lg (1024–1212px) → stack: full-width builder (cards in grid), full-width review BELOW
   //   wide (1213–1439) → stack: full-width builder (cards in row), full-width review BELOW
   //   xl (≥1440px)     → toggle between:
-  //                         'stack' = same as wide (stacked + toggle button visible)
-  //                         'side'  = builder left (flex-1) + review sticky right (380px)
+  //                         'stack' = stacked view (toggle button visible)
+  //                         'side'  = builder left (768px) + review sticky right (380px)
 
   const isSideMode = layoutMode === 'side';
 
   // Outer wrapper flex direction:
-  //  - below lg: column
-  //  - lg to wide: row (side by side — natural at 1024-1212)
-  //  - wide+: depends on mode
-  //    • stack → column (stacked full width)
-  //    • side  → row (side by side again)
+  //  - below xl (1440px): column (stacked layout)
+  //  - xl (>=1440px): side-by-side if layoutMode is 'side', otherwise column
   const outerFlexClass = isSideMode
-    ? 'flex flex-col lg:flex-row xl:flex-row gap-6 items-start'
-    : 'flex flex-col lg:flex-row wide:flex-col gap-6 items-start wide:items-center justify-center';
+    ? 'flex flex-col xl:flex-row gap-6 items-start justify-center w-full'
+    : 'flex flex-col gap-6 items-center justify-center w-full';
 
   // Builder column width:
-  //  stack: full width up to 1240px max
+  //  stack: full width up to 768px (or 1240px when wide)
   //  side:  fixed 768px per Figma
   const builderColClass = isSideMode
     ? 'w-[768px] flex-shrink-0 min-w-0'
-    : 'flex-1 w-full max-w-[768px] wide:max-w-[1240px] space-y-0 min-w-0';
+    : 'w-full max-w-[768px] wide:max-w-[1240px] space-y-0 min-w-0';
 
   // Review panel column:
-  //  stack: full width below review builder (stacked)
-  //  side:  fixed 380px sticky panel
+  //  stack: full width up to 768px (or 1240px when wide) to match builder
+  //  side:  fixed 380px sticky panel on right
   const reviewColClass = isSideMode
-    ? 'w-full lg:w-[340px] xl:w-[380px] flex-shrink-0 xl:sticky xl:top-6'
-    : 'w-full lg:w-[340px] wide:w-full wide:max-w-[1240px] flex-shrink-0 lg:sticky lg:top-6 wide:relative wide:top-0';
+    ? 'w-full xl:w-[380px] flex-shrink-0 xl:sticky xl:top-6'
+    : 'w-full max-w-[768px] wide:max-w-[1240px] flex-shrink-0';
 
   return (
     <div className="w-full max-w-[1600px] mx-auto px-4 md:px-8 py-8">
