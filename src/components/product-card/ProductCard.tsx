@@ -52,9 +52,9 @@ export function ProductCard({ product, layoutMode = 'stack' }: ProductCardProps)
         ${
           isWideVertical
             // stack/wide: horizontal on mobile→tablet, flip to vertical at wide breakpoint
-            ? 'flex flex-row p-[11px] gap-[19px] h-[159px] w-full max-w-[361.5px] wide:flex-col wide:w-[224.6px] wide:h-[331.1px] wide:pt-[15px] wide:pb-[15px] wide:px-[11px] wide:gap-[19px] wide:max-w-none wide:flex-shrink-0'
+            ? 'flex flex-row p-[11px] gap-[19px] h-[159px] w-full max-w-[361.5px] wide:flex-col wide:w-[224.6px] wide:h-[331.1px] wide:pt-[15px] wide:pb-[15px] wide:px-[11px] wide:gap-[19px] wide:max-w-none wide:flex-shrink-0 max-[400px]:flex-col max-[400px]:w-[224.6px] max-[400px]:h-[331.1px] max-[400px]:pt-[15px] max-[400px]:pb-[15px] max-[400px]:px-[11px] max-[400px]:gap-[19px] max-[400px]:flex-shrink-0'
             // side: always horizontal row layout regardless of breakpoint
-            : 'flex flex-row p-[11px] gap-[19px] h-[159px] w-full max-w-[361.5px]'
+            : 'flex flex-row p-[11px] gap-[19px] h-[159px] w-full max-w-[361.5px] max-[400px]:flex-col max-[400px]:w-[224.6px] max-[400px]:h-[331.1px] max-[400px]:pt-[15px] max-[400px]:pb-[15px] max-[400px]:px-[11px] max-[400px]:gap-[19px] max-[400px]:flex-shrink-0'
         }
       `}
       aria-label={product.name}
@@ -64,8 +64,8 @@ export function ProductCard({ product, layoutMode = 'stack' }: ProductCardProps)
         className={`flex-shrink-0 flex flex-col items-center relative
           ${
             isWideVertical
-              ? 'w-[101px] h-[137px] wide:w-[202.6px] wide:h-[117.39px]'
-              : 'w-[101px] h-[137px]'
+              ? 'w-[101px] h-[137px] wide:w-[202.6px] wide:h-[117.39px] max-[400px]:w-[202.6px] max-[400px]:h-[117.39px]'
+              : 'w-[101px] h-[137px] max-[400px]:w-[202.6px] max-[400px]:h-[117.39px]'
           }
         `}
       >
@@ -77,7 +77,7 @@ export function ProductCard({ product, layoutMode = 'stack' }: ProductCardProps)
         )}
 
         {/* Image container */}
-        <div className="w-full h-full   rounded-[5px] flex items-center justify-center overflow-hidden">
+        <div className="w-full h-full rounded-[5px] flex items-center justify-center overflow-hidden">
           <img
             src={displayImage}
             alt={product.name}
@@ -103,9 +103,9 @@ export function ProductCard({ product, layoutMode = 'stack' }: ProductCardProps)
             isWideVertical
               // wide/stack vertical: flex-1 fills remaining card height naturally
               // overflow-hidden prevents content from escaping fixed card bounds
-              ? 'flex-1 min-w-0 h-[137px] wide:w-[202.6px] wide:flex-1 wide:overflow-hidden wide:gap-[10px]'
+              ? 'flex-1 min-w-0 h-[137px] wide:w-[202.6px] wide:flex-1 wide:overflow-hidden wide:gap-[10px] max-[400px]:w-[202.6px] max-[400px]:flex-1 max-[400px]:overflow-hidden max-[400px]:gap-[10px]'
               // side mode: flex-1 adapts to available space
-              : 'flex-1 min-w-0 h-[137px]'
+              : 'flex-1 min-w-0 h-[137px] max-[400px]:w-[202.6px] max-[400px]:flex-1 max-[400px]:overflow-hidden max-[400px]:gap-[10px]'
           }
         `}
       >
@@ -155,8 +155,8 @@ export function ProductCard({ product, layoutMode = 'stack' }: ProductCardProps)
           className={`flex items-center justify-between pt-1 border-t border-slate-100 h-[35px] gap-[10px]
             ${
               isWideVertical
-                ? 'w-full wide:w-[202.6px]'
-                : 'w-full'
+                ? 'w-full wide:w-[202.6px] max-[400px]:w-[202.6px]'
+                : 'w-full max-[400px]:w-[202.6px]'
             }
           `}
         >
