@@ -1,0 +1,177 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Gilroy Font (Figma spec) ────────────────────────────────────────────── */
+/* Using Inter as base — swap for Gilroy @font-face if you have the font files */
+:root {
+  --font-gilroy: 'Gilroy', 'Inter', system-ui, sans-serif;
+}
+
+/* ─── Base Resets ─────────────────────────────────────────────────────────── */
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-gilroy);
+    background-color: #ffffff;
+    color: #0F172A;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* ─── Component Utilities ─────────────────────────────────────────────────── */
+@layer components {
+
+  /* ── Product Badge (Save X%) ─────────────────────────────── */
+  .product-badge {
+    @apply inline-flex items-center justify-center;
+    background-color: #4E2FD2;
+    color: #ffffff;
+    border-radius: 10px;
+    padding: 2px 6px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.6px;
+    line-height: 130%;
+    white-space: nowrap;
+  }
+
+  /* ── Product Card ─────────────────────────────────────────── */
+  .product-card {
+    @apply bg-white rounded-[10px] border-2 border-slate-200 transition-all duration-200;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.06);
+  }
+
+  .product-card:hover {
+    box-shadow: 0 4px 12px 0 rgba(78,47,210,0.10);
+  }
+
+  .product-card.selected {
+    border-color: rgba(78,47,210,0.70);          /* #4E2FD2B2 */
+    box-shadow: 0 0 0 1.5px rgba(78,47,210,0.70), 0 4px 16px 0 rgba(78,47,210,0.12);
+  }
+
+  /* ── Price: Compare-at (strikethrough) ───────────────────── */
+  .price-compare {
+    color: #D8392B;
+    text-decoration: line-through;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.6px;
+    line-height: 100%;
+  }
+
+  /* ── Price: Sale price ───────────────────────────────────── */
+  .price-sale {
+    font-family: 'Gilroy-Regular', var(--font-gilroy);
+    color: #575757;
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 0.6px;
+    line-height: 100%;
+    text-align: right;
+  }
+
+  /* ── Variant chip ────────────────────────────────────────── */
+  .variant-chip {
+    @apply flex items-center gap-[4px] px-[6px] py-0.5 rounded-[5px] border cursor-pointer h-[26px]
+           transition-all duration-150 text-[11px] font-medium text-slate-600;
+    border-color: #E2E8F0;
+  }
+
+  .variant-chip:hover {
+    border-color: #0AA288;
+  }
+
+  .variant-chip.active {
+    border-color: #0AA288;
+    background-color: #F6FEFC;
+    color: #1F1F1F;
+  }
+
+  /* ── Quantity stepper ────────────────────────────────────── */
+  .qty-btn {
+    @apply w-7 h-7 flex items-center justify-center rounded border border-slate-200 text-slate-600
+           hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors;
+  }
+
+  .qty-value {
+    @apply w-6 text-center text-sm font-semibold text-slate-800;
+  }
+
+  /* ── Checkout CTA button ─────────────────────────────────── */
+  .checkout-btn {
+    @apply w-full py-3.5 text-white text-base font-bold rounded-xl transition-colors duration-200 shadow-md tracking-wide;
+    background-color: #4E2FD2;
+  }
+
+  .checkout-btn:hover {
+    background-color: #3D22B0;
+  }
+
+  /* ── Step progress label ─────────────────────────────────── */
+  .step-label {
+    font-family: 'Gilroy-Medium', var(--font-gilroy);
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 100%;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    color: #484848;
+  }
+
+  /* ── Review category heading ─────────────────────────────── */
+  .review-category {
+    @apply text-[10px] font-semibold uppercase tracking-widest text-slate-400 pt-3 pb-1;
+  }
+
+  /* ── Savings callout bar ─────────────────────────────────── */
+  .savings-bar {
+    @apply text-[11px] font-semibold px-3 py-2 rounded-lg text-center;
+    color: #4E2FD2;
+    background-color: rgba(78,47,210,0.06);
+    border: 1px solid rgba(78,47,210,0.20);
+  }
+
+  /* ── Review line item typography ─────────────────────────── */
+  .review-product-name {
+    font-family: 'Gilroy-Medium', var(--font-gilroy);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    letter-spacing: 0.005em; /* 0.5% */
+  }
+
+  .review-product-price {
+    font-family: 'Gilroy-SemiBold', var(--font-gilroy);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    letter-spacing: 0.005em; /* 0.5% */
+    text-align: right;
+  }
+}
+
+/* ─── Scrollbar ───────────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
