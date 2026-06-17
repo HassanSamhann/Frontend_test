@@ -45,19 +45,25 @@
     white-space: nowrap;
   }
 
-  /* ── Product Card ─────────────────────────────────────────── */
   .product-card {
-    @apply bg-white rounded-[10px] border-2 border-slate-200 transition-all duration-200;
+    @apply bg-white rounded-[10px] border-2 border-slate-200 transition-all duration-300;
     box-shadow: 0 1px 3px 0 rgba(0,0,0,0.06);
   }
 
   .product-card:hover {
-    box-shadow: 0 4px 12px 0 rgba(78,47,210,0.10);
+    transform: translateY(-2px);
+    border-color: rgba(78,47,210,0.3);
+    box-shadow: 0 8px 20px 0 rgba(78,47,210,0.12);
   }
 
   .product-card.selected {
-    border-color: rgba(78,47,210,0.70);          /* #4E2FD2B2 */
-    box-shadow: 0 0 0 1.5px rgba(78,47,210,0.70), 0 4px 16px 0 rgba(78,47,210,0.12);
+    border-color: #4E2FD2;
+    box-shadow: 0 0 0 1px #4E2FD2, 0 8px 24px 0 rgba(78,47,210,0.18);
+  }
+
+  .product-card.selected:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 0 1px #4E2FD2, 0 12px 28px 0 rgba(78,47,210,0.24);
   }
 
   /* ── Price: Compare-at (strikethrough) ───────────────────── */
@@ -84,18 +90,21 @@
   /* ── Variant chip ────────────────────────────────────────── */
   .variant-chip {
     @apply flex items-center gap-[4px] px-[6px] py-0.5 rounded-[5px] border cursor-pointer h-[26px]
-           transition-all duration-150 text-[11px] font-medium text-slate-600;
+           transition-all duration-200 text-[11px] font-medium text-slate-600;
     border-color: #E2E8F0;
   }
 
   .variant-chip:hover {
-    border-color: #0AA288;
+    border-color: #4E2FD2;
+    background-color: rgba(78,47,210,0.02);
   }
 
   .variant-chip.active {
-    border-color: #0AA288;
-    background-color: #F6FEFC;
-    color: #1F1F1F;
+    border-color: #4E2FD2;
+    background-color: rgba(78,47,210,0.08);
+    color: #4E2FD2;
+    font-weight: 600;
+    box-shadow: 0 0 0 1px #4E2FD2;
   }
 
   /* ── Quantity stepper ────────────────────────────────────── */

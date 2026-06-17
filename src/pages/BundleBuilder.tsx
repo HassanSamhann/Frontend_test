@@ -181,7 +181,7 @@ function BuilderInner({ products }: { products: Product[] }) {
         <div className={builderColClass}>
           {/* Side mode: steps wrapper with Figma dimensions */}
           <div className={isSideMode
-            ? 'flex flex-col gap-[5px] pt-[15px] rounded-[10px] overflow-hidden'
+            ? 'flex flex-col pt-[15px] rounded-[10px] overflow-hidden'
             : ''
           }>
             {STEPS.map((step) => {
@@ -225,11 +225,24 @@ function BuilderInner({ products }: { products: Product[] }) {
 export default function BundleBuilderPage() {
   const { data: products, isLoading, isError } = useQuery<Product[]>({
     queryKey: ['products'],
-    queryFn: () =>
-      fetch('/data/products.json').then((r) => {
-        if (!r.ok) throw new Error('Failed to load products');
-        return r.json();
-      }),
+    queryFn: async () => {
+      try {
+        // Try backend API first
+        const res = await fetch('http://localhost:3001/api/products');
+        if (res.ok) {
+          const data = await res.json();
+          console.log('[API] Successfully loaded products from backend server.');
+          return data;
+        }
+      } catch (err) {
+        console.warn('[API] Backend server is not running or returned error. Falling back to local static JSON data.', err);
+      }
+
+      // Fallback: local static JSON
+      const r = await fetch('/data/products.json');
+      if (!r.ok) throw new Error('Failed to load products from local backup');
+      return r.json();
+    },
     staleTime: Infinity,
   });
 

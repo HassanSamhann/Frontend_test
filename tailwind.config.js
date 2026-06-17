@@ -46,6 +46,20 @@ export default {
         'card-selected': '0 0 0 2px rgba(78,47,210,0.70)',  // #4E2FD2B2
         'panel':         '0 1px 3px 0 rgba(0,0,0,0.06), 0 1px 2px 0 rgba(0,0,0,0.04)',
       },
+      keyframes: {
+        'fade-in-slide-up': {
+          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        'scale-up': {
+          '0%': { transform: 'scale(0.95)', opacity: '0' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
+        },
+      },
+      animation: {
+        'fade-in-slide-up': 'fade-in-slide-up 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+        'scale-up': 'scale-up 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
+      },
     },
   },
   plugins: [],

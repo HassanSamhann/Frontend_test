@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { useBundle } from '@/context/BundleContext';
 import { useBundleSummary } from '@/hooks/useBundleSummary';
 import { ReviewLineItem } from './ReviewLineItem';
 import { formatPrice } from '@/utils/formatPrice';
+import { Toast } from '@/components/toast/Toast';
 
 const CATEGORY_LABELS: Record<string, string> = {
   cameras:     'CAMERAS',
@@ -16,15 +18,20 @@ export function ReviewPanel({ narrow = false }: { narrow?: boolean }) {
   const { saveToStorage } = useBundle();
   const summary = useBundleSummary();
 
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [showCheckoutSuccess, setShowCheckoutSuccess] = useState(false);
+
   const hasItems = summary.lines.length > 0;
 
   function handleCheckout() {
-    alert('🎉 Thank you! Your system is ready for checkout.\n\n(This is a prototype — no actual checkout in this demo.)');
+    setShowCheckoutSuccess(true);
   }
 
   function handleSave() {
     saveToStorage();
-    alert('Your system configuration has been saved successfully!');
+    setToastMessage('System configuration saved successfully to your browser!');
+    setShowToast(true);
   }
 
   return (
@@ -244,6 +251,121 @@ export function ReviewPanel({ narrow = false }: { narrow?: boolean }) {
           </button>
         </div>
       </div>
+
+      {/* ─── Toast Notification ─── */}
+      <Toast
+        message={toastMessage}
+        isVisible={showToast}
+        onClose={() => setShowToast(false)}
+      />
+
+      {/* ─── Checkout Success Modal ─── */}
+      {showCheckoutSuccess && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in"
+          role="dialog"
+          aria-modal="true"
+        >
+          <div
+            className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col animate-scale-up text-left"
+            style={{ fontFamily: 'var(--font-gilroy), sans-serif' }}
+          >
+            {/* Modal Header */}
+            <div className="bg-[#4E2FD2] text-white px-6 py-8 text-center relative flex-shrink-0">
+              {/* Animated Success Checkmark */}
+              <div className="mx-auto w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-4 border border-white/30 animate-bounce">
+                <svg width="28" height="20" viewBox="0 0 28 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M2 10L10 18L26 2" stroke="white" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+              <h3 className="text-2xl font-extrabold tracking-tight">Order Confirmed!</h3>
+              <p className="text-white/80 text-sm mt-1">Your premium security system bundle is ready to ship.</p>
+              
+              <button
+                type="button"
+                onClick={() => setShowCheckoutSuccess(false)}
+                className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors"
+                aria-label="Close modal"
+              >
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1.5 1.5L16.5 16.5M16.5 1.5L1.5 16.5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Modal Content / Order Summary */}
+            <div className="flex-1 overflow-y-auto p-6 space-y-6">
+              <div>
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Your Selected Bundle</h4>
+                <div className="border border-slate-100 rounded-xl overflow-hidden divide-y divide-slate-100">
+                  {CATEGORY_ORDER.map((cat) => {
+                    const catLines = summary.linesByCategory[cat];
+                    if (!catLines || catLines.length === 0) return null;
+                    return (
+                      <div key={cat} className="p-4 bg-slate-50/50">
+                        <p className="text-[10px] font-bold text-[#4E2FD2] tracking-wider uppercase mb-2">{CATEGORY_LABELS[cat]}</p>
+                        <div className="space-y-3">
+                          {catLines.map((line) => (
+                            <div key={`${line.productId}-${line.variantId}`} className="flex items-center justify-between text-sm">
+                              <div className="flex items-center gap-3">
+                                <img src={line.imageUrl} alt={line.name} className="w-8 h-8 object-contain bg-white rounded-md border border-slate-100 p-0.5" />
+                                <div className="text-left">
+                                  <p className="font-semibold text-slate-800">{line.name}</p>
+                                  {line.variantId !== 'default' && (
+                                    <p className="text-xs text-slate-500 capitalize">Color: {line.variantId}</p>
+                                  )}
+                                </div>
+                              </div>
+                              <div className="text-right">
+                                <p className="font-medium text-slate-700">Qty: {line.quantity}</p>
+                                <p className="text-xs text-slate-500 font-semibold">{formatPrice(line.price * line.quantity)}</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Summary Totals */}
+              <div className="bg-[#F0F4FF] rounded-xl p-4 space-y-2">
+                <div className="flex justify-between text-sm text-slate-600">
+                  <span>Regular Subtotal</span>
+                  <span className="line-through">{formatPrice(summary.compareAtSubtotal)}</span>
+                </div>
+                {summary.savings > 0 && (
+                  <div className="flex justify-between text-sm font-semibold text-[#00A288]">
+                    <span>Your Bundle Savings</span>
+                    <span>-{formatPrice(summary.savings)}</span>
+                  </div>
+                )}
+                <div className="flex justify-between text-sm text-slate-600">
+                  <span>Shipping</span>
+                  <span className="text-[#4E2FD2] font-semibold">FREE</span>
+                </div>
+                <div className="border-t border-[#D5E5FF] pt-2 flex justify-between items-baseline">
+                  <span className="text-base font-bold text-slate-800">Final Total</span>
+                  <span className="text-2xl font-extrabold text-[#4E2FD2]">{formatPrice(summary.total)}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="bg-slate-50 border-t border-slate-100 px-6 py-4 flex items-center justify-between flex-shrink-0">
+              <span className="text-xs text-slate-500 font-medium">As low as $19.19/mo financing available.</span>
+              <button
+                type="button"
+                onClick={() => setShowCheckoutSuccess(false)}
+                className="px-6 py-2.5 bg-[#4E2FD2] hover:bg-[#3D22B0] text-white text-sm font-bold rounded-lg transition-colors shadow-md active:scale-95"
+              >
+                Close Summary
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </aside>
   );
 }

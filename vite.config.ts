@@ -9,4 +9,10 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  // @ts-ignore
+  test: {
+    globals: true,
+    environment: 'happy-dom',
+    setupFiles: './src/tests/setupTests.ts',
+  },
 })
