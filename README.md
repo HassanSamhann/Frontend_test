@@ -36,6 +36,7 @@ Once started, open your browser and navigate to:
  **[http://localhost:5173](http://localhost:5173)**
 
 ---
+   you can use  `node server.js` to run the backend server on port 3001
 
 ##  Additional NPM Scripts
 
